@@ -19,6 +19,7 @@ then
   [ ! -e build.fsx ] && packages/FAKE/tools/FAKE.exe init.fsx
   packages/FAKE/tools/FAKE.exe $@ --fsiargs -d:MONO build.fsx 
 else
+  echo "In mono"
   # use mono
   mono .paket/paket.bootstrapper.exe
   exit_code=$?
