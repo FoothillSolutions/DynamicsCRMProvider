@@ -24,10 +24,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Setup MSBuild
-      - name: setup MSBuild
-        uses: microsoft/setup-msbuild@v1
-
       # Build project using a specific script
       - name: Build
         shell: bash
