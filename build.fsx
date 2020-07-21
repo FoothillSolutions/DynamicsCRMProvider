@@ -85,10 +85,10 @@ Target "AssemblyInfo" (fun _ ->
           Attribute.FileVersion release.AssemblyVersion ]
 
     let getProjectDetails projectPath =
-        let projectName = System.IO.Path.GetFileNameWithoutExtension(projectPath)
+        let projectName = System.IO.Path.GetFileNameWithoutExtension(projectPath: string)
         ( projectPath, 
           projectName,
-          System.IO.Path.GetDirectoryName(projectPath),
+          System.IO.Path.GetDirectoryName(projectPath: string),
           (getAssemblyInfoAttributes projectName)
         )
         
@@ -318,7 +318,7 @@ Target "ReleaseDocs" (fun _ ->
     Branches.push tempDocsDir
 )
 
-#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "paket-files/FoothillSolutions/FAKE/modules/Octokit/Octokit.fsx"
 open Octokit
 
 Target "Release" (fun _ ->
@@ -349,10 +349,10 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
 //  ==> "RunTests"
-//   =?> ("GenerateReferenceDocs",isLocalBuild)
-//   =?> ("GenerateDocs",isLocalBuild)
-//   ==> "All"
-//   =?> ("ReleaseDocs",isLocalBuild)
+  =?> ("GenerateReferenceDocs",isLocalBuild)
+  =?> ("GenerateDocs",isLocalBuild)
+  ==> "All"
+  =?> ("ReleaseDocs",isLocalBuild)
 
 "All" 
 #if MONO

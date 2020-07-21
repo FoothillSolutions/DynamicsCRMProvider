@@ -1,7 +1,6 @@
 RESTRICTION: == net462
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.64.18)
     FSharp.Formatting (4.1)
     Microsoft.CrmSdk.CoreAssemblies (9.0.2.26)
     NUnit (3.12)
@@ -24,8 +23,9 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: FoothillSolutions/FAKE
-    modules/Octokit/Octokit.fsx (74421063dd3915e8e1e407926b38b8b25df50e36)
-      Octokit (>= 0.20)
+  remote: FoothillSolutions/FAKE
+      modules/Octokit/Octokit.fsx (62cbd242f336419aad54a5d9e797282be675f84d)
+        Octokit (>= 0.20)
   remote: fsprojects/FSharp.TypeProviders.StarterPack
     src/ProvidedTypes.fs (b45779c1571b54a2bc6bafa12690a8d9763150d1)
     src/ProvidedTypes.fsi (b45779c1571b54a2bc6bafa12690a8d9763150d1)
