@@ -29,10 +29,6 @@ jobs:
       - name: Setup NuGet
         uses: NuGet/setup-nuget@v1.0.2
 
-      # Restore Nuget packages for project
-      - name: Restore Packages
-        run: nuget restore DynamicsCRMProvider.sln
-
       # Build project using a specific script
       - name: Build
         shell: cmd
@@ -43,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: DLL Build Result
-          path: ./bin/*.dll
+          path: ./bin
