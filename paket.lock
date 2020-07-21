@@ -23,7 +23,9 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: FoothillSolutions/FAKE
-    Octokit (>= 0.20)
+  remote: FoothillSolutions/FAKE
+      modules/Octokit/Octokit.fsx (62cbd242f336419aad54a5d9e797282be675f84d)
+        Octokit (>= 0.20)
   remote: fsprojects/FSharp.TypeProviders.StarterPack
     src/ProvidedTypes.fs (b45779c1571b54a2bc6bafa12690a8d9763150d1)
     src/ProvidedTypes.fsi (b45779c1571b54a2bc6bafa12690a8d9763150d1)

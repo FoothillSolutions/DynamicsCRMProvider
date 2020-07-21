@@ -8,5 +8,6 @@ nuget SourceLink.Fake
 nuget Microsoft.CrmSdk.CoreAssemblies
 
 github FoothillSolutions/FAKE:release/next
+github FoothillSolutions/FAKE:release/next modules/Octokit/Octokit.fsx
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fs
