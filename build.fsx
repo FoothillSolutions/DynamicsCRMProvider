@@ -203,7 +203,7 @@ Target "PublishNuget" (fun _ ->
 // Generate the documentation
 
 Target "GenerateReferenceDocs" (fun _ ->
-    if not <| executeFSIWithArgs "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:REFERENCE"] [] then
+    if not <| fakeStartInfo "docs/tools" "generate.fsx" ["--define:RELEASE"; "--define:REFERENCE"] [] then
       failwith "generating reference documentation failed"
 )
 
@@ -211,7 +211,7 @@ let generateHelp' fail debug =
     let args =
         if debug then ["--define:HELP"]
         else ["--define:RELEASE"; "--define:HELP"]
-    if executeFSIWithArgs "docs/tools" "generate.fsx" args [] then
+    if fakeStartInfo "docs/tools" "generate.fsx" args [] then
         traceImportant "Help generated"
     else
         if fail then
@@ -304,6 +304,22 @@ Target "AddLangDocs" (fun _ ->
         createIndexFsx lang)
 )
 
+let fakePath = "packages" </> "FAKE" </> "tools" </> "FAKE.exe"
+let fakeStartInfo script workingDirectory args fsiargs environmentVars =
+    //(fun (info: System.Diagnostics.ProcessStartInfo) ->
+    (fun (info: ProcStartInfo) ->
+            { info with
+                FileName = System.IO.Path.GetFullPath fakePath
+                Arguments = sprintf "%s --fsiargs -d:FAKE %s \"%s\"" args fsiargs script
+                WorkingDirectory = workingDirectory
+                Environment =
+                    [   "MSBuild", msBuildExe
+                        "GIT", Git.CommandHelper.gitPath
+                        "FSI", Fake.FSIHelper.fsiPath
+                    ] |> Map.ofList |> Some
+            }
+    )
+
 // --------------------------------------------------------------------------------------
 // Release Scripts
 
@@ -349,10 +365,10 @@ Target "All" DoNothing
   ==> "Build"
   ==> "CopyBinaries"
 //  ==> "RunTests"
-//  =?> ("GenerateReferenceDocs",isLocalBuild)
-//  =?> ("GenerateDocs",isLocalBuild)
+  =?> ("GenerateReferenceDocs",isLocalBuild)
+  =?> ("GenerateDocs",isLocalBuild)
   ==> "All"
-//  =?> ("ReleaseDocs",isLocalBuild)
+  =?> ("ReleaseDocs",isLocalBuild)
 
 "All" 
 #if MONO
