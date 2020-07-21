@@ -1,4 +1,4 @@
-﻿name: dotnet-framework
+﻿name: dotnet-framework-mono
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
