@@ -1,13 +1,16 @@
 framework: net462
 source https://nuget.org/api/v2
 
+nuget FAKE
+nuget Fake.IO.FileSystem
+nuget FSharp.Compiler.Tools 10.0.2
+nuget FSharp.Core 4.3
 nuget FSharp.Formatting
 nuget NUnit 
 nuget NUnit.Runners
 nuget SourceLink.Fake
 nuget Microsoft.CrmSdk.CoreAssemblies
 
-github FoothillSolutions/FAKE:release/next
 github FoothillSolutions/FAKE:release/next modules/Octokit/Octokit.fsx
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fs

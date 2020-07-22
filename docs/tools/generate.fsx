@@ -21,6 +21,7 @@ let info =
 // --------------------------------------------------------------------------------------
 
 #I "../../packages/FAKE/tools/"
+#I "../../packages/FSharp.Compiler.Tools/tools/"
 #load "../../packages/FSharp.Formatting/FSharp.Formatting.fsx"
 #r "NuGet.Core.dll"
 #r "FakeLib.dll"
