@@ -10,6 +10,7 @@ nuget NUnit
 nuget NUnit.Runners
 nuget SourceLink.Fake
 nuget Microsoft.CrmSdk.CoreAssemblies
+nuget Octokit
 
 github FoothillSolutions/FAKE:release/next modules/Octokit/Octokit.fsx
 github fsprojects/FSharp.TypeProviders.StarterPack src/ProvidedTypes.fsi

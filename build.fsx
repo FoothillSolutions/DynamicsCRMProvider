@@ -4,15 +4,20 @@
 
 //#I "packages/FSharp.Compiler.Tools/tools/"
 #r @"packages/FAKE/tools/FakeLib.dll"
+#r @"packages/Octokit/lib/net46/Octokit.dll"
+
 open Fake.DotNet
 open Fake.Core
 open Fake.Core.TargetOperators
 open Fake.Tools
 open Fake.IO
+open Fake.IO.GlobbingPattern
 open Fake.IO.Globbing.Operators
 open Fake.IO.FileSystemOperators
+open Fake.Api
 open System
 open System.IO
+open Octokit
 #if MONO
 #else
 //#load "packages/SourceLink.Fake/tools/Fake.fsx"
@@ -142,13 +147,8 @@ let setParams (defaults:MSBuildParams) =
         { defaults with
             Properties =
                 [
-                    "NewFSharpSdkLocation", @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\FSharpSdk"
-                    "NewFSharpCompilerLocation", @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\FSharp\"
-                    "MSBuildExtensionsPath32", @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild"
                     "VisualStudioVersion", "16.0"
-                    "ToolsVersion", "12.0"
                     "Optimize", "True"
-                    "DebugSymbols", "True"
                     "Configuration", buildMode
                 ]
          }
@@ -349,8 +349,8 @@ Target.create "ReleaseDocs" (fun _ ->
     Git.Branches.push tempDocsDir
 )
 
-#load "paket-files/FoothillSolutions/FAKE/modules/Octokit/Octokit.fsx"
-open Octokit
+//#load "paket-files/FoothillSolutions/FAKE/modules/Octokit/Octokit.fsx"
+//open Octokit
 
 Target.create "Release" (fun _ ->
     Git.Staging.stageAll ""
@@ -361,11 +361,17 @@ Target.create "Release" (fun _ ->
     Git.Branches.pushTag "" "origin" release.NugetVersion
     
     // release on github
-    createClient (Environment.environVarOrDefault "github-user" "") (Environment.environVarOrDefault "github-pw" "")
-    |> createDraft gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes 
-    // TODO: |> uploadFile "PATH_TO_FILE"    
-    |> releaseDraft
-    |> Async.RunSynchronously
+    let token = 
+        match Environment.environVarOrDefault "github_token" "" with 
+        | s when not (System.String.IsNullOrWhiteSpace s) -> s
+        |_ -> failwith "please set the github_token environment variable to a github personal access token with repro access."
+    GitHub.createClientWithToken token
+     |> GitHub.draftNewRelease gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes 
+     
+     // TODO: |> uploadFile "PATH_TO_FILE"    
+     //|> Release 
+     |> Async.RunSynchronously
+     |>ignore
 )
 
 Target.create "BuildPackage" ignore
@@ -380,10 +386,10 @@ Target.create "All" ignore
   ==> "Build"
   ==> "CopyBinaries"
 //  ==> "RunTests"
-  =?> ("GenerateReferenceDocs",BuildServer.isLocalBuild)
-  =?> ("GenerateDocs",BuildServer.isLocalBuild)
+//  =?> ("GenerateReferenceDocs",BuildServer.isLocalBuild)
+//  =?> ("GenerateDocs",BuildServer.isLocalBuild)
   ==> "All"
-  =?> ("ReleaseDocs",BuildServer.isLocalBuild)
+//  =?> ("ReleaseDocs",BuildServer.isLocalBuild)
 
 "All" 
 #if MONO
@@ -393,19 +399,19 @@ Target.create "All" ignore
   ==> "NuGet"
   ==> "BuildPackage"
 
-// "CleanDocs"
-//   ==> "GenerateHelp"
-//   ==> "GenerateReferenceDocs"
-//   ==> "GenerateDocs"
+"CleanDocs"
+  ==> "GenerateHelp"
+  ==> "GenerateReferenceDocs"
+  ==> "GenerateDocs"
 
-// "CleanDocs"
-//   ==> "GenerateHelpDebug"
+"CleanDocs"
+  ==> "GenerateHelpDebug"
 
-// "GenerateHelp"
-//   ==> "KeepRunning"
+"GenerateHelp"
+  ==> "KeepRunning"
     
-// "ReleaseDocs"
-//   ==> "Release"
+"ReleaseDocs"
+  ==> "Release"
 
 "BuildPackage"
   ==> "PublishNuget"
