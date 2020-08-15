@@ -59,7 +59,7 @@
   <Choose>
   <When Condition="'$(VisualStudioVersion)' == '16.0'">
     <PropertyGroup>
-      <FSharpTargetsPath>$(MSBuildExtensionsPath32)\..\Common7\IDE\CommonExtensions\Microsoft\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
+      <FSharpTargetsPath>$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\FSharp\Microsoft.FSharp.Targets</FSharpTargetsPath>
     </PropertyGroup>
   </When>
   <When Condition="'$(FSharpTargetsPath)' == ''">
