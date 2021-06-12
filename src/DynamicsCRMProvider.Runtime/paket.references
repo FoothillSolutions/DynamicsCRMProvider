@@ -1,1 +1,3 @@
-﻿Microsoft.CrmSdk.CoreAssemblies
+﻿System.Configuration.ConfigurationManager
+Microsoft.Powerplatform.Cds.Client
+System.IO.FileSystem.AccessControl

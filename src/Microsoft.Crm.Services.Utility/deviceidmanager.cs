@@ -24,10 +24,10 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
-using System.ServiceModel.Description;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.Powerplatform.Cds.Client;
 
 namespace Microsoft.Crm.Services.Utility
 {
@@ -72,7 +72,7 @@ namespace Microsoft.Crm.Services.Utility
         /// Loads the device credentials (if they exist).
         /// </summary>
         /// <returns></returns>
-        public static ClientCredentials LoadOrRegisterDevice()
+        public static CdsServiceClient LoadOrRegisterDevice()
         {
             return LoadOrRegisterDevice(null);
         }
@@ -82,7 +82,7 @@ namespace Microsoft.Crm.Services.Utility
         /// </summary>
         /// <param name="deviceName">Device name that should be registered</param>
         /// <param name="devicePassword">Device password that should be registered</param>
-        public static ClientCredentials LoadOrRegisterDevice(string deviceName, string devicePassword)
+        public static CdsServiceClient LoadOrRegisterDevice(string deviceName, string devicePassword)
         {
             return LoadOrRegisterDevice(null, deviceName, devicePassword);
         }
@@ -325,7 +325,7 @@ namespace Microsoft.Crm.Services.Utility
                 string.IsNullOrEmpty(environment.Environment) ? null : "-" + environment.Environment.ToUpperInvariant()));
         }
 
-        private static ClientCredentials RegisterDevice(Guid applicationId, Uri issuerUri, LiveDevice device)
+        private static CdsServiceClient RegisterDevice(Guid applicationId, Uri issuerUri, LiveDevice device)
         {
             EnvironmentConfiguration environment = DiscoverEnvironmentInternal(issuerUri);
 

@@ -3,21 +3,35 @@
 // --------------------------------------------------------------------------------------
 
 //#I "packages/FSharp.Compiler.Tools/tools/"
-#r @"packages/FAKE/tools/FakeLib.dll"
-#r @"packages/Octokit/lib/net46/Octokit.dll"
+#r "paket:
+nuget Fake.DotNet.AssemblyInfoFile
+nuget Fake.DotNet.MSBuild
+nuget Fake.Api.GitHub
+nuget Fake.Tools.Git
+nuget Fake.Core.ReleaseNotes
+nuget Fake.DotNet.Paket
+nuget Fake.DotNet.FSFormatting
+nuget Fake.DotNet.Testing.NUnit
+nuget Fake.DotNet.Fsi
+nuget Octokit
+nuget Fake.Core.Target
+ //
+"
+#load "./.fake/build.fsx/intellisense.fsx"
+//#r @"packages/Octokit/lib/net46/Octokit.dll"
 
-open Fake.DotNet
 open Fake.Core
 open Fake.Core.TargetOperators
-open Fake.Tools
 open Fake.IO
 open Fake.IO.GlobbingPattern
 open Fake.IO.Globbing.Operators
 open Fake.IO.FileSystemOperators
+open Fake.Tools
+open Fake.DotNet
+open Fake.DotNet.Testing
 open Fake.Api
 open System
 open System.IO
-open Octokit
 #if MONO
 #else
 //#load "packages/SourceLink.Fake/tools/Fake.fsx"
@@ -142,21 +156,12 @@ Target.create "CleanDocs" (fun _ ->
 // Build library & test project
 let toolPath = Environment.environVarOrDefault "ToolPath"
 
-let buildMode = Environment.environVarOrDefault "buildMode" "Release"
-let setParams (defaults:MSBuildParams) =
-        { defaults with
-            Properties =
-                [
-                    "VisualStudioVersion", "16.0"
-                    "Optimize", "True"
-                    "Configuration", buildMode
-                ]
-         }
+
+let configuration = DotNet.BuildConfiguration.fromEnvironVarOrDefault "configuration" DotNet.BuildConfiguration.Release
          
 Target.create "Build" (fun _ ->
-    !! solutionFile
-    |> MSBuild.runRelease setParams "" "Rebuild"
-    |> ignore
+    solutionFile
+    |> DotNet.build(fun opts -> {opts with Configuration = configuration})
 )
 
 // --------------------------------------------------------------------------------------
@@ -370,8 +375,8 @@ Target.create "Release" (fun _ ->
      
      // TODO: |> uploadFile "PATH_TO_FILE"    
      //|> Release 
+     |> GitHub.publishDraft
      |> Async.RunSynchronously
-     |>ignore
 )
 
 Target.create "BuildPackage" ignore

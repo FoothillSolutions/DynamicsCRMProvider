@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "try-convert": {
+      "version": "0.5.125603",
+      "commands": [
+        "try-convert"
+      ]
+    },
+    "fake-cli": {
+      "version": "5.20.3",
+      "commands": [
+        "fake"
+      ]
+    },
+    "paket": {
+      "version": "5.249.2",
+      "commands": [
+        "paket"
+      ]
+    },
+    "fsharp.formatting.commandtool": {
+      "version": "7.2.6",
+      "commands": [
+        "fsdocs"
+      ]
+    }
+  }
+}

@@ -17,6 +17,7 @@ open Microsoft.Xrm.Sdk.Query
 open Microsoft.Xrm.Sdk.Messages
 open Microsoft.Xrm.Sdk.Metadata
 open Microsoft.Xrm.Sdk.Client
+open Microsoft.PowerPlatform.Cds.Client
 
 open FSharp.Data.TypeProviders.XrmProvider.Runtime.QueryExpression                      
 open FSharp.Data.TypeProviders.XrmProvider.Runtime.Common
@@ -298,7 +299,10 @@ type public XrmDataContext (orgService,user,password:string,domain,crmOnline,org
                     creds.UserName.Password <- password
                 creds
             let uri = Uri(orgService)            
-            let orgProxy = new OrganizationServiceProxy(uri, null, creds, (if crmOnline then Microsoft.Crm.Services.Utility.DeviceIdManager.LoadOrRegisterDevice() else null))
+            //let orgProxy = new CdsServiceClient(uri, null, creds, (if crmOnline then Microsoft.Crm.Services.Utility.DeviceIdManager.LoadOrRegisterDevice() else null))
+            let userName =  if (String.IsNullOrEmpty(domain)) then user else sprintf "%s\\%s" domain user
+            let ConString = sprintf "Uri=%s;Username=%s;Password=%s;AuthType=AuthType=OAuth; AppId=51f81489-12ee-4a9e-aaae-a2591f45987d; RedirectUri=app://58145B91-0C36-4500-8554-080854F2AC97; LoginPrompt=Auto" orgService userName password
+            let orgProxy = new CdsServiceClient(ConString)
             org <- (orgProxy :> IOrganizationService)
         else
             org <-  orgInstance

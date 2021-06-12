@@ -4,6 +4,7 @@ module FSharp.Data.TypeProviders.XrmProvider.Internal.Logging
 open System
 open System.IO
 open System.Diagnostics
+open System.IO
 open Microsoft.FSharp.Reflection
 
 /// The logging is enabled by setting the CRMPROVIDER_LOG environment variable
@@ -29,10 +30,9 @@ let private logFile =
 let private writeString str =
   try
     // This serializes all writes to the log file (from multiple processes)
-    use fs = new FileStream(logFile, FileMode.Append, Security.AccessControl.FileSystemRights.AppendData, FileShare.Write, 4096, FileOptions.None)
+    use fs = new FileStream(logFile, FileMode.Append, FileAccess.ReadWrite, FileShare.Write, 4096, FileOptions.None)
     use writer = new StreamWriter(fs)
     writer.AutoFlush <- true
-
     let pid = Process.GetCurrentProcess().Id
     let tid = System.Threading.Thread.CurrentThread.ManagedThreadId
     let apid = System.AppDomain.CurrentDomain.Id

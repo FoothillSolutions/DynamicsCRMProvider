@@ -63,7 +63,8 @@ type XrmTypeProvider(config: TypeProviderConfig) as this =
 
     let createOrgService uri clientCreds deviceCreds =
         let uri = Uri(uri)        
-        let orgProxy = new OrganizationServiceProxy(uri, null, clientCreds, deviceCreds);
+        //let orgProxy = new OrganizationServiceProxy(uri, null, clientCreds, deviceCreds);
+        let orgProxy = new CdsServiceClient(uri, null, clientCreds, deviceCrejjdsj);
         orgProxy :> IOrganizationService
     
     let extractDescription (input:Label) =
